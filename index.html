@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Railway / Bus Waiting List Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav-wrap">
+        <div class="brand">
+          <div class="brand-mark">R</div>
+          <div>
+            <p class="brand-name">TrainBus Queue</p>
+            <p class="brand-subtitle">Waiting List Manager</p>
+          </div>
+        </div>
+
+        <nav class="main-nav" aria-label="Main navigation">
+          <a href="#home">Home</a>
+          <a href="#dashboard">Dashboard</a>
+          <a href="#book-ticket">Book Ticket</a>
+          <a href="#waiting-list">Waiting List</a>
+          <a href="#queue-visualization">Queue Visualization</a>
+          <a href="#about-project">About Project</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="home">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <span class="eyebrow">Queue Data Structure Demo</span>
+            <h1>Railway / Bus Ticket Waiting List Management System</h1>
+            <p>
+              Manage real-time ticket waiting queues using the First In, First Out (FIFO)
+              principle in a professional reservation dashboard.
+            </p>
+            <div class="hero-actions">
+              <a href="#book-ticket" class="primary-btn">Register Passenger</a>
+              <button id="reset-queue-btn" class="secondary-btn" type="button">Reset Queue</button>
+            </div>
+            <ul class="hero-metrics" aria-label="System highlights">
+              <li><strong>FIFO</strong><span>Queue logic</span></li>
+              <li><strong>C + WASM</strong><span>Core system</span></li>
+              <li><strong>10</strong><span>Max capacity</span></li>
+            </ul>
+          </div>
+
+          <div class="hero-panel glass-card">
+            <div class="panel-header">
+              <span class="status-dot"></span>
+              <span>System Overview</span>
+            </div>
+            <div class="route-card">
+              <div class="route-badge">Live Queue</div>
+              <h3 id="live-queue-status">Active Queue</h3>
+              <div class="route-line">
+                <div>
+                  <small>Current Front</small>
+                  <strong id="front-passenger-name">Waiting for passengers</strong>
+                </div>
+                <div class="route-arrow">→</div>
+                <div>
+                  <small>Rear</small>
+                  <strong id="rear-passenger-name">No passengers</strong>
+                </div>
+              </div>
+            </div>
+            <div class="mini-grid">
+              <div>
+                <span>Waiting</span>
+                <strong id="hero-waiting-count">0</strong>
+              </div>
+              <div>
+                <span>Served</span>
+                <strong id="hero-served-count">0</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dashboard" class="stats-section">
+        <div class="container">
+          <div class="section-heading">
+            <span class="eyebrow">Dashboard</span>
+            <h2>Live Waiting List Statistics</h2>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card card-accent-blue">
+              <div class="stat-icon">👥</div>
+              <div>
+                <span>Total Passengers</span>
+                <strong id="total-passengers">0</strong>
+              </div>
+            </article>
+
+            <article class="stat-card card-accent-cyan">
+              <div class="stat-icon">⏳</div>
+              <div>
+                <span>Waiting</span>
+                <strong id="waiting-passengers">0</strong>
+              </div>
+            </article>
+
+            <article class="stat-card card-accent-green">
+              <div class="stat-icon">✅</div>
+              <div>
+                <span>Served</span>
+                <strong id="served-passengers">0</strong>
+              </div>
+            </article>
+
+            <article class="stat-card card-accent-gold">
+              <div class="stat-icon">🧳</div>
+              <div>
+                <span>Available Capacity</span>
+                <strong id="available-capacity">10</strong>
+              </div>
+            </article>
+
+            <article class="stat-card card-accent-violet">
+              <div class="stat-icon">📊</div>
+              <div>
+                <span>Queue Status</span>
+                <strong id="queue-status">Empty</strong>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="book-ticket" class="booking-section">
+        <div class="container booking-layout">
+          <div class="section-heading left">
+            <span class="eyebrow">Registration</span>
+            <h2>Passenger Registration</h2>
+          </div>
+
+          <div class="form-card glass-card">
+            <form id="passenger-form">
+              <div class="two-column">
+                <label>
+                  <span>Full Name</span>
+                  <input type="text" id="full-name" name="fullName" placeholder="e.g. Aisha Rahman" required />
+                </label>
+                <label>
+                  <span>Booking ID</span>
+                  <input type="text" id="booking-id" name="bookingId" placeholder="e.g. RWL-104" required />
+                </label>
+              </div>
+
+              <div class="three-column">
+                <label>
+                  <span>Age</span>
+                  <input type="number" id="age" name="age" min="1" max="120" placeholder="25" required />
+                </label>
+                <label>
+                  <span>Gender</span>
+                  <select id="gender" name="gender" required>
+                    <option value="">Select</option>
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Transport Type</span>
+                  <select id="transport-type" name="transportType" required>
+                    <option value="">Select</option>
+                    <option value="Railway">Railway</option>
+                    <option value="Bus">Bus</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="two-column">
+                <label>
+                  <span>Source</span>
+                  <input type="text" id="source" name="source" placeholder="Dhaka" required />
+                </label>
+                <label>
+                  <span>Destination</span>
+                  <input type="text" id="destination" name="destination" placeholder="Chittagong" required />
+                </label>
+              </div>
+
+              <div class="three-column">
+                <label>
+                  <span>Journey Date</span>
+                  <input type="date" id="journey-date" name="journeyDate" required />
+                </label>
+                <label>
+                  <span>Departure Time</span>
+                  <input type="time" id="departure-time" name="departureTime" required />
+                </label>
+                <label>
+                  <span>Number of Tickets</span>
+                  <input type="number" id="tickets" name="tickets" min="1" max="6" placeholder="1" required />
+                </label>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="primary-btn">Enqueue Passenger</button>
+                <button type="button" id="clear-form-btn" class="ghost-btn">Clear</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="ops-panel">
+        <div class="container">
+          <div class="section-heading left">
+            <span class="eyebrow">Operations</span>
+            <h2>Queue Operations Control Panel</h2>
+          </div>
+
+          <div class="control-grid">
+            <button class="control-btn primary-btn" data-action="dequeue" type="button">Dequeue Passenger</button>
+            <button class="control-btn primary-btn" data-action="peek" type="button">Peek Front</button>
+            <button class="control-btn primary-btn" data-action="display" type="button">Display Queue</button>
+            <button class="control-btn primary-btn" data-action="empty" type="button">Check Empty</button>
+            <button class="control-btn primary-btn" data-action="full" type="button">Check Full</button>
+            <button class="control-btn primary-btn" data-action="search" type="button">Search Passenger</button>
+            <button class="control-btn primary-btn" data-action="cancel" type="button">Cancel Registration</button>
+            <button class="control-btn secondary-btn" data-action="reset" type="button">Reset Queue</button>
+          </div>
+
+          <div class="search-row">
+            <input id="search-input" type="text" placeholder="Search by name or booking ID" />
+            <input id="cancel-input" type="text" placeholder="Booking ID to cancel" />
+          </div>
+        </div>
+      </section>
+
+      <section id="waiting-list" class="waiting-list-section">
+        <div class="container">
+          <div class="section-heading left">
+            <span class="eyebrow">Waiting List</span>
+            <h2>Passenger Records</h2>
+          </div>
+
+          <div class="table-wrap glass-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Waiting No.</th>
+                  <th>Passenger Name</th>
+                  <th>Booking ID</th>
+                  <th>Transport</th>
+                  <th>Route</th>
+                  <th>Journey Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="waiting-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="queue-visualization" class="queue-visualization-section">
+        <div class="container">
+          <div class="section-heading left">
+            <span class="eyebrow">Queue Visualization</span>
+            <h2>FIFO Queue Representation</h2>
+          </div>
+
+          <div class="queue-visualization glass-card">
+            <div class="queue-legend">
+              <span><i class="legend-dot front"></i> FRONT</span>
+              <span><i class="legend-dot rear"></i> REAR</span>
+              <span><i class="legend-dot active"></i> Active Passenger</span>
+            </div>
+            <div id="queue-visual-box" class="queue-visual-box" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about-project" class="about-section">
+        <div class="container about-grid">
+          <div>
+            <span class="eyebrow">About Project</span>
+            <h2>Queue Data Structure in Real-World Systems</h2>
+          </div>
+
+          <div class="info-card glass-card">
+            <p><strong>Data Structure Used:</strong> Queue</p>
+            <p><strong>Principle:</strong> FIFO (First In, First Out)</p>
+            <p><strong>Programming Language:</strong> C</p>
+            <p><strong>Operations:</strong> Enqueue, Dequeue, Peek, Display, IsEmpty and IsFull</p>
+            <p>
+              In real-world railway and bus reservation systems, queues are used to manage waiting
+              lists when seats are unavailable. The first passenger registered gets the earliest
+              chance to receive a ticket or be served when a seat becomes available. This logic is
+              essential for fair, ordered, and efficient service.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
